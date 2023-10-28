@@ -3,11 +3,21 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+import random
 from scrapy import signals
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
+from .settings import USERAGENTS
 
+class ShowRequestHeadersMiddleware:
+    def process_request(self, request , spider):
+        print(f"Request Headers: {request.headers}")
+
+class RotateUserAgentMiddleware:
+    def process_request(self, request, spider):
+        user_agent = random.choice(USERAGENTS)
+        request.headers["User-Agent"] = user_agent
 
 class StackoverflowScraperSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
@@ -60,6 +70,8 @@ class StackoverflowScraperDownloaderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
+
+
 
     @classmethod
     def from_crawler(cls, crawler):

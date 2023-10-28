@@ -19,8 +19,8 @@ class QuestiontagSpider(scrapy.Spider):
         "AUTOTHROTTLE_ENABLED" : True, #Default False
         "AUTOTHROTTLE_TARGET_CONCURRENCY" : 1, #Default 1
         "AUTOTHROTTLE_DEBUG" : True,
-        "CONCURRENT_REQUESTS" : 11, #Default 16
-        "ROBOTSTXT_OBEY" : True #Default False
+        #"CONCURRENT_REQUESTS" : 8, #Default 16
+        "ROBOTSTXT_OBEY" : False #Default False
     }
 
 
@@ -34,40 +34,49 @@ class QuestiontagSpider(scrapy.Spider):
 
         self.tags_page_url = "/tags?page={page_number}&tab=popular"
 
-        self.question_summaries_url = "/questions/tagged/{tag_name}?tab=votes&page={page_number}"
+        self.question_summaries_url = "/questions/tagged/{tag_name}?tab=votes&page={page_number}&pagesize=50"
 
         self.question_detail_page_url_suffix = "?answertab=createdasc"
-        self.tags_page_number = 1
+
+        self.tags_total_page_number = 2
 
         
         self.number_of_questions_per_tag = 100
         
         
-        self.tags_page_final_url = self.base_url + self.tags_page_url.format(page_number = self.tags_page_number)
+        tags_page_final_url = self.base_url + self.tags_page_url.format(page_number = 1)
 
-        yield scrapy.Request(url = self.tags_page_final_url , callback = self.parse_tags_page)
+        yield scrapy.Request(url = tags_page_final_url , callback = self.parse_tags_page)
 
 
 
     def parse_tags_page(self, response):
 
+        print(response.request.headers)
+
         tag_question_link_list = response.css("#tags_list .js-tag-cell a.post-tag")
         tag_question_count_list = response.css("#tags_list .js-tag-cell div:nth-child(3) div:first-child::text").getall()
-
-        tag_question_count_list = map(lambda x : int(x.split()[0]), tag_question_count_list)
+        print("hiiii111111")
+        tag_question_count_list = list(map(lambda x : int(x.split()[0]), tag_question_count_list))
 
         for x in range(36):
             if tag_question_count_list[x] >= 3000:
-
+                print("hiiii2222")
                 tag_name = tag_question_link_list[x].attrib["href"].split("/")[3]
+
+                print(tag_name)
                 
-                question_summaries_page_final_url = self.base_url + self.question_summaries_url.format(tag_name = tag_name , page_number = 1,) 
+                question_summaries_page_final_url = self.base_url + self.question_summaries_url.format(tag_name = tag_name , page_number = 1)
 
-                scrapy.Request(url = question_summaries_page_final_url, callback = self.parse_question_summaries_page)
+                print(question_summaries_page_final_url)
+                yield scrapy.Request(url = question_summaries_page_final_url, callback = self.parse_question_summaries_page)
 
-        for y in range(1):
-            self.tags_page_number += 1
-            scrapy.Request(url = self.tags_page_final_url.format(p = self.tags_page_number), callback = self.parse_tags_page)
+        for tags_page_number in range(1 , self.tags_total_page_number):
+            
+            tags_page_number += 1
+            tags_page_final_url = self.base_url + self.tags_page_url.format(page_number = tags_page_number)
+
+            yield scrapy.Request(url = tags_page_final_url, callback = self.parse_tags_page)
         #.css("#tags_list .js-tag-cell a.post-tag")[2].attrib["href"] /questions/tagged/javascript'
         #.css("#tags_list .js-tag-cell div:nth-child(3) div:first-child::text").get() '2516889 questions'
         
@@ -77,10 +86,18 @@ class QuestiontagSpider(scrapy.Spider):
     
     def parse_question_summaries_page(self, response):
         
+        print(response.request.headers)
         question_summaries = response.css("#questions .s-post-summary")
 
-        tag_name = response.url.split("{")[1].split("}")[0]
-        page_number = int(response.url.split("{")[2].strip("}"))
+        print("hiiiii3333333")
+        #https://stackoverflow.com/questions/tagged/javascript?tab=votes&page=2&pagesize=50
+
+        t = response.url.split("/")[-1]
+        tag_name = t[0 : t.find("?")]
+
+
+        t = t.split("&")[1]
+        page_number = int(t[t.find("=")+1 :])
 
         # global total_page_count
 
@@ -112,6 +129,7 @@ class QuestiontagSpider(scrapy.Spider):
 
     def parse_question_detail_page(self, response):
 
+        print(response.request.headers)
         stackoverflow_qt_item = StackoverflowQTItems()
 
         question_detail_page = response

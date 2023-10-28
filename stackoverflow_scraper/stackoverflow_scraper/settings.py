@@ -51,12 +51,23 @@ NEWSPIDER_MODULE = "stackoverflow_scraper.spiders"
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   #"stackoverflow_scraper.middlewares.StackoverflowScraperDownloaderMiddleware": 543,
-    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
-    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
-    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
-    'scrapy_fake_useragent.middleware.RetryUserAgentMiddleware': 500,
+    "stackoverflow_scraper.middlewares.RotateUserAgentMiddleware": 530,
+    "stackoverflow_scraper.middlewares.ShowRequestHeadersMiddleware": 540,
+    "stackoverflow_scraper.middlewares.StackoverflowScraperDownloaderMiddleware": 543,
+    # 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    # 'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
+
+
 }
+
+
+USERAGENTS = []
+
+user_agents = open("C:\\Users\\marda\\Desktop\\Stack_Overflow_Data_Mining_Project\\stackoverflow_scraper\\stackoverflow_scraper\\user-agents.txt", "r", encoding= "utf-8")
+
+for user_agent in user_agents:
+    USERAGENTS.append(str(user_agent))
+
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
