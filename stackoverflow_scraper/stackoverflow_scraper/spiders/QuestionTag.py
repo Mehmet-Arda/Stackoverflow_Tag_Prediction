@@ -61,7 +61,7 @@ class QuestiontagSpider(scrapy.Spider):
         
         tag_question_count_list = list(map(lambda x : int(x.split()[0]), tag_question_count_list))
 
-        for x in range(36):
+        for x in range(3):
             if tag_question_count_list[x] >= 3000:
                 
                 tag_name = tag_question_link_list[x].attrib["href"].split("/")[3]
@@ -112,10 +112,8 @@ class QuestiontagSpider(scrapy.Spider):
 
             question_detail_page_url = question_summaries[i].css(".s-post-summary--content-title .s-link").attrib["href"]
 
-            if len(question_summaries[i].css(".s-post-summary--meta .s-user-card time.s-user-card--time:empty")) == 0: # []
-                    
-                    question_detail_page_final_url = self.base_url + question_detail_page_url + self.question_detail_page_url_suffix
-                    yield scrapy.Request(url = question_detail_page_final_url , callback = self.parse_question_detail_page)
+            question_detail_page_final_url = self.base_url + question_detail_page_url + self.question_detail_page_url_suffix
+            yield scrapy.Request(url = question_detail_page_final_url , callback = self.parse_question_detail_page)
 
             
         page_number += 1
