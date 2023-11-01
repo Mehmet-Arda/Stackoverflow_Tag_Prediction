@@ -12,15 +12,17 @@ class QuestiontagSpider(scrapy.Spider):
             "stackoverflow_data.json" : { "format" : "json", "encoding" : "utf-8", "overwrite" : True}
         },
 
-        #"DOWNLOAD_DELAY" : 2.5, #Default 0,
-        "AUTOTHROTTLE_START_DELAY" : 8, #Default 5
-        "RANDOMIZED _DOWNLOAD_DELAY" : True, #Default False
+        "DOWNLOAD_DELAY" : 0.5, #Default 0,
+        #"AUTOTHROTTLE_START_DELAY" : 3, #Default 5
+        "RANDOMIZE_DOWNLOAD_DELAY" : True, #Default True
         "COOKIES_ENABLED" : False, #Default True
-        "AUTOTHROTTLE_ENABLED" : True, #Default False
-        "AUTOTHROTTLE_TARGET_CONCURRENCY" : 1, #Default 1
-        "AUTOTHROTTLE_DEBUG" : True,
-        #"CONCURRENT_REQUESTS" : 8, #Default 16
-        "ROBOTSTXT_OBEY" : False #Default False
+        #"AUTOTHROTTLE_ENABLED" : True, #Default False
+        #"AUTOTHROTTLE_TARGET_CONCURRENCY" : 16, #Default 1
+        #"AUTOTHROTTLE_DEBUG" : True, #Default False
+        #"AUTOTHROTTLE_MAX_DELAY" : 30, #Default 60
+        "CONCURRENT_REQUESTS" : 16, #Default 16
+        "ROBOTSTXT_OBEY" : False, #Default False
+        "CONCURRENT_REQUESTS_PER_DOMAIN":16
     }
 
 
@@ -59,7 +61,7 @@ class QuestiontagSpider(scrapy.Spider):
         print("hiiii111111")
         tag_question_count_list = list(map(lambda x : int(x.split()[0]), tag_question_count_list))
 
-        for x in range(36):
+        for x in range(3):
             if tag_question_count_list[x] >= 3000:
                 print("hiiii2222")
                 tag_name = tag_question_link_list[x].attrib["href"].split("/")[3]

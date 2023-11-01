@@ -61,12 +61,7 @@ DOWNLOADER_MIDDLEWARES = {
 }
 
 
-USERAGENTS = []
 
-user_agents = open("C:\\Users\\marda\\Desktop\\Stack_Overflow_Data_Mining_Project\\stackoverflow_scraper\\stackoverflow_scraper\\user-agents.txt", "r", encoding= "utf-8")
-
-for user_agent in user_agents:
-    USERAGENTS.append(str(user_agent))
 
 
 # Enable or disable extensions

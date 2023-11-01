@@ -5,10 +5,11 @@
 
 import random
 from scrapy import signals
+from fake_useragent import UserAgent
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
-from .settings import USERAGENTS
+
 
 class ShowRequestHeadersMiddleware:
     def process_request(self, request , spider):
@@ -16,7 +17,8 @@ class ShowRequestHeadersMiddleware:
 
 class RotateUserAgentMiddleware:
     def process_request(self, request, spider):
-        user_agent = random.choice(USERAGENTS)
+        ua = UserAgent(min_percentage= 3.0)
+        user_agent = ua.random
         request.headers["User-Agent"] = user_agent
 
 class StackoverflowScraperSpiderMiddleware:
