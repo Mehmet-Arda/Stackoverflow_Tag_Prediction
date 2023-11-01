@@ -58,12 +58,12 @@ class QuestiontagSpider(scrapy.Spider):
 
         tag_question_link_list = response.css("#tags_list .js-tag-cell a.post-tag")
         tag_question_count_list = response.css("#tags_list .js-tag-cell div:nth-child(3) div:first-child::text").getall()
-        print("hiiii111111")
+        
         tag_question_count_list = list(map(lambda x : int(x.split()[0]), tag_question_count_list))
 
-        for x in range(3):
+        for x in range(36):
             if tag_question_count_list[x] >= 3000:
-                print("hiiii2222")
+                
                 tag_name = tag_question_link_list[x].attrib["href"].split("/")[3]
 
                 print(tag_name)
@@ -91,7 +91,7 @@ class QuestiontagSpider(scrapy.Spider):
         print(response.request.headers)
         question_summaries = response.css("#questions .s-post-summary")
 
-        print("hiiiii3333333")
+        
         #https://stackoverflow.com/questions/tagged/javascript?tab=votes&page=2&pagesize=50
 
         t = response.url.split("/")[-1]
