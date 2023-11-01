@@ -12,7 +12,7 @@ class QuestiontagSpider(scrapy.Spider):
             "stackoverflow_data.json" : { "format" : "json", "encoding" : "utf-8", "overwrite" : True}
         },
 
-        "DOWNLOAD_DELAY" : 0.5, #Default 0,
+        "DOWNLOAD_DELAY" : 0.6, #Default 0,
         #"AUTOTHROTTLE_START_DELAY" : 3, #Default 5
         "RANDOMIZE_DOWNLOAD_DELAY" : True, #Default True
         "COOKIES_ENABLED" : False, #Default True
@@ -20,9 +20,10 @@ class QuestiontagSpider(scrapy.Spider):
         #"AUTOTHROTTLE_TARGET_CONCURRENCY" : 16, #Default 1
         #"AUTOTHROTTLE_DEBUG" : True, #Default False
         #"AUTOTHROTTLE_MAX_DELAY" : 30, #Default 60
-        "CONCURRENT_REQUESTS" : 16, #Default 16
+        "CONCURRENT_REQUESTS" : 1, #Default 16
         "ROBOTSTXT_OBEY" : False, #Default False
-        "CONCURRENT_REQUESTS_PER_DOMAIN":16
+        "CONCURRENT_REQUESTS_PER_DOMAIN":1,
+        #"DOWNLOAD_TIMEOUT" : 60# Defaul 180
     }
 
 
@@ -40,10 +41,10 @@ class QuestiontagSpider(scrapy.Spider):
 
         self.question_detail_page_url_suffix = "?answertab=createdasc"
 
-        self.tags_total_page_number = 2
+        self.tags_total_page_number = 11
 
         
-        self.number_of_questions_per_tag = 100
+        self.number_of_questions_per_tag = 3000
         
         
         tags_page_final_url = self.base_url + self.tags_page_url.format(page_number = 1)
@@ -108,7 +109,7 @@ class QuestiontagSpider(scrapy.Spider):
         #     total_page_count = response.css(".s-pagination.pager a:nth-child(7)::text").get()
         
 
-        for i in range(50):
+        for i in range(len(question_summaries)):
 
             question_detail_page_url = question_summaries[i].css(".s-post-summary--content-title .s-link").attrib["href"]
 
@@ -140,7 +141,20 @@ class QuestiontagSpider(scrapy.Spider):
         stackoverflow_qt_item["views"] = question_detail_page.css("#question-header + div div[title ^= Viewed]").attrib["title"]
         stackoverflow_qt_item["tags"] = question_detail_page.css(".question .postcell .post-taglist li a.post-tag::text").getall()
         stackoverflow_qt_item["creation_date"] = question_detail_page.css("#question-header + div time[itemprop='dateCreated']").attrib["datetime"]
-        stackoverflow_qt_item["answer_count"] = question_detail_page.css("#answers #answers-header h2[data-answercount]").attrib["data-answercount"]
-        stackoverflow_qt_item["first_answer_date"] = question_detail_page.css("#answers .answer[data-position-on-page = '1'] .answercell time[itemprop = 'dateCreated']").attrib["datetime"]        
 
+        question_no_answers = question_detail_page.css("#answers.no-answers")
+
+        
+        if question_no_answers == []:
+            
+            stackoverflow_qt_item["answer_count"] = question_detail_page.css("#answers #answers-header h2[data-answercount]").attrib["data-answercount"]
+            stackoverflow_qt_item["first_answer_date"] = question_detail_page.css("#answers .answer[data-position-on-page = '1'] .answercell time[itemprop = 'dateCreated']").attrib["datetime"]        
+
+        else : 
+          
+            stackoverflow_qt_item["answer_count"] = 0
+            stackoverflow_qt_item["first_answer_date"] = "NAN"
+
+        
+        
         yield stackoverflow_qt_item
