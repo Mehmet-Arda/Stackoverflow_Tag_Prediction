@@ -22,7 +22,7 @@ class QuestiontagSpider(scrapy.Spider):
         #"AUTOTHROTTLE_MAX_DELAY" : 30, #Default 60
         "CONCURRENT_REQUESTS" : 1, #Default 16
         "ROBOTSTXT_OBEY" : False, #Default False
-        "CONCURRENT_REQUESTS_PER_DOMAIN":1,
+        "CONCURRENT_REQUESTS_PER_DOMAIN":1
         #"DOWNLOAD_TIMEOUT" : 60# Defaul 180
     }
 
@@ -62,7 +62,7 @@ class QuestiontagSpider(scrapy.Spider):
         
         tag_question_count_list = list(map(lambda x : int(x.split()[0]), tag_question_count_list))
 
-        for x in range(3):
+        for x in range(36):
             if tag_question_count_list[x] >= 3000:
                 
                 tag_name = tag_question_link_list[x].attrib["href"].split("/")[3]
