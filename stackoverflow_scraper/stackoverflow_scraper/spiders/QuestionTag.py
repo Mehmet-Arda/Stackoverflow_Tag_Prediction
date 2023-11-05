@@ -12,7 +12,7 @@ class QuestiontagSpider(scrapy.Spider):
             "stackoverflow_data.json" : { "format" : "json", "encoding" : "utf-8", "overwrite" : True}
         },
 
-        "DOWNLOAD_DELAY" : 0.8, #Default 0,
+        "DOWNLOAD_DELAY" : 0.6, #Default 0,
         #"AUTOTHROTTLE_START_DELAY" : 3, #Default 5
         "RANDOMIZE_DOWNLOAD_DELAY" : True, #Default True
         "COOKIES_ENABLED" : False, #Default True
