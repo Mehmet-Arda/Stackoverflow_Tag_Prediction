@@ -11,7 +11,7 @@ BOT_NAME = "stackoverflow_scraper"
 
 SPIDER_MODULES = ["stackoverflow_scraper.spiders"]
 NEWSPIDER_MODULE = "stackoverflow_scraper.spiders"
-
+SCRAPEOPS_API_KEY = '12ae6a3f-cb8b-4382-a090-b9c12755761d'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "stackoverflow_scraper (+http://www.yourdomain.com)"
@@ -56,7 +56,8 @@ DOWNLOADER_MIDDLEWARES = {
     "stackoverflow_scraper.middlewares.StackoverflowScraperDownloaderMiddleware": 543,
     # 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
     # 'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
-
+    'scrapeops_scrapy.middleware.retry.RetryMiddleware': 550,
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None
 
 }
 
@@ -69,6 +70,10 @@ DOWNLOADER_MIDDLEWARES = {
 #EXTENSIONS = {
 #    "scrapy.extensions.telnet.TelnetConsole": None,
 #}
+
+EXTENSIONS = {
+    'scrapeops_scrapy.extension.ScrapeOpsMonitor': 500, 
+}
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
