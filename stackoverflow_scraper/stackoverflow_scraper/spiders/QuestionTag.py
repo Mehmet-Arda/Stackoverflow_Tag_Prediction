@@ -41,10 +41,10 @@ class QuestiontagSpider(scrapy.Spider):
 
         self.question_detail_page_url_suffix = "?answertab=createdasc"
 
-        self.tags_total_page_number = 11
+        self.tags_total_page_number = 2
 
         
-        self.number_of_questions_per_tag = 3000
+        self.number_of_questions_per_tag = 10000
         
         
         tags_page_final_url = self.base_url + self.tags_page_url.format(page_number = 1)
