@@ -14,7 +14,7 @@ class QuestiontagSpider(scrapy.Spider):
             "stackoverflow_data.json" : { "format" : "json", "encoding" : "utf-8", "overwrite" : True}
         },
 
-        "DOWNLOAD_DELAY" : 0.6, #Default 0,
+        "DOWNLOAD_DELAY" : 0.72, #Default 0,
         #"AUTOTHROTTLE_START_DELAY" : 3, #Default 5
         "RANDOMIZE_DOWNLOAD_DELAY" : True, #Default True
         "COOKIES_ENABLED" : False, #Default True
@@ -24,7 +24,7 @@ class QuestiontagSpider(scrapy.Spider):
         #"AUTOTHROTTLE_MAX_DELAY" : 30, #Default 60
         "CONCURRENT_REQUESTS" : 1, #Default 16
         "ROBOTSTXT_OBEY" : False, #Default False
-        "CONCURRENT_REQUESTS_PER_DOMAIN":1,
+        "CONCURRENT_REQUESTS_PER_DOMAIN":1
         #"DOWNLOAD_TIMEOUT" : 60# Defaul 180
     }
 
@@ -43,10 +43,14 @@ class QuestiontagSpider(scrapy.Spider):
 
         self.question_detail_page_url_suffix = "?answertab=createdasc"
 
+<<<<<<< HEAD
         self.tags_total_page_number = 7
+=======
+        self.tags_total_page_number = 2
+>>>>>>> e36996cc6ef36656d61c6efcc720e67852be56c6
 
         
-        self.number_of_questions_per_tag = 3000
+        self.number_of_questions_per_tag = 10000
         
         
         tags_page_final_url = self.base_url + self.tags_page_url.format(page_number = 7)
