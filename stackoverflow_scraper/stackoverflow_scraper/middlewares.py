@@ -10,7 +10,6 @@ from fake_useragent import UserAgent
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
 
-
 class ShowRequestHeadersMiddleware:
     def process_request(self, request , spider):
         print(f"Request Headers: {request.headers}")
@@ -20,6 +19,19 @@ class RotateUserAgentMiddleware:
         ua = UserAgent(min_percentage= 3.0)
         user_agent = ua.random
         request.headers["User-Agent"] = user_agent
+
+""" class RotateRequestProxiesMiddleware:
+    
+    def process_request(self, request, spider):
+
+        try:
+            request.meta["proxy"] = "http://" + str(random.choice(proxies))
+
+        except Exception as ex:
+
+            print(ex) """
+
+
 
 class StackoverflowScraperSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,

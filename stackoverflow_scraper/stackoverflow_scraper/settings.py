@@ -48,16 +48,23 @@ NEWSPIDER_MODULE = "stackoverflow_scraper.spiders"
 #    "stackoverflow_scraper.middlewares.StackoverflowScraperSpiderMiddleware": 543,
 #}
 
+
+
+
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
+    #"stackoverflow_scraper.middlewares.RotateRequestProxiesMiddleware" : 360,
     "stackoverflow_scraper.middlewares.RotateUserAgentMiddleware": 530,
     "stackoverflow_scraper.middlewares.ShowRequestHeadersMiddleware": 540,
     "stackoverflow_scraper.middlewares.StackoverflowScraperDownloaderMiddleware": 543,
+    #'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 400,
+    #'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+    #'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
     # 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
     # 'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
 
-
+    
 }
 
 

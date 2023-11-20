@@ -4,6 +4,8 @@ from scrapy.http import Request
 from stackoverflow_scraper.items import StackoverflowQTItems
 from datetime import datetime
 
+
+
 class QuestiontagSpider(scrapy.Spider):
     name = "QuestionTag"
 
@@ -41,13 +43,13 @@ class QuestiontagSpider(scrapy.Spider):
 
         self.question_detail_page_url_suffix = "?answertab=createdasc"
 
-        self.tags_total_page_number = 11
+        self.tags_total_page_number = 7
 
         
         self.number_of_questions_per_tag = 3000
         
         
-        tags_page_final_url = self.base_url + self.tags_page_url.format(page_number = 1)
+        tags_page_final_url = self.base_url + self.tags_page_url.format(page_number = 7)
 
         yield scrapy.Request(url = tags_page_final_url , callback = self.parse_tags_page)
 
@@ -62,7 +64,7 @@ class QuestiontagSpider(scrapy.Spider):
         
         tag_question_count_list = list(map(lambda x : int(x.split()[0]), tag_question_count_list))
 
-        for x in range(3):
+        for x in range(36):
             if tag_question_count_list[x] >= 3000:
                 
                 tag_name = tag_question_link_list[x].attrib["href"].split("/")[3]
@@ -74,7 +76,7 @@ class QuestiontagSpider(scrapy.Spider):
                 print(question_summaries_page_final_url)
                 yield scrapy.Request(url = question_summaries_page_final_url, callback = self.parse_question_summaries_page)
 
-        for tags_page_number in range(1 , self.tags_total_page_number):
+        for tags_page_number in range(7 , self.tags_total_page_number):
             
             tags_page_number += 1
             tags_page_final_url = self.base_url + self.tags_page_url.format(page_number = tags_page_number)
